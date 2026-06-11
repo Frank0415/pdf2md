@@ -39,7 +39,11 @@ if ! command -v uv >/dev/null 2>&1; then
   exit 1
 fi
 
-bash "${SKILL_SCRIPTS}/detect-platform.sh" --repo "$REPO" "${PASS_ARGS[@]}"
+if ((${#PASS_ARGS[@]})); then
+  bash "${SKILL_SCRIPTS}/detect-platform.sh" --repo "$REPO" "${PASS_ARGS[@]}"
+else
+  bash "${SKILL_SCRIPTS}/detect-platform.sh" --repo "$REPO"
+fi
 
 MANIFEST="${REPO}/.pdf2md/platform.json"
 if [[ ! -f "$MANIFEST" ]]; then
@@ -47,9 +51,15 @@ if [[ ! -f "$MANIFEST" ]]; then
   exit 1
 fi
 
-PROFILE="$(python3 -c "import json; print(json.load(open('${MANIFEST}'))['profile'])")"
-GPU_BACKEND="$(python3 -c "import json; print(json.load(open('${MANIFEST}'))['gpu_backend'])")"
-TORCH_INDEX="$(python3 -c "import json; d=json.load(open('${MANIFEST}')); print(d.get('torch_index',''))")"
+read_manifest() {
+  python3 -c "import json,sys; d=json.load(open('${MANIFEST}')); print(d.get(sys.argv[1],''))" "$1"
+}
+
+PROFILE="$(read_manifest profile)"
+GPU_BACKEND="$(read_manifest gpu_backend)"
+TORCH_INDEX="$(read_manifest torch_index)"
+MINERU_BACKEND="$(read_manifest mineru_backend)"
+MINERU_EXTRAS="$(read_manifest mineru_extras)"
 
 echo "Installing for profile: $PROFILE"
 
@@ -72,7 +82,7 @@ case "$PROFILE" in
     if [[ -n "$TORCH_INDEX" ]]; then
       uv pip install -U torch torchvision --index-url "https://download.pytorch.org/whl/${TORCH_INDEX}"
     fi
-    uv pip install -U "mineru[core,vllm]"
+    uv pip install -U "mineru[core]"
     ;;
   linux_cpu)
     uv pip install -U "mineru[core]"
@@ -96,6 +106,7 @@ echo ""
 echo "Install complete."
 echo "  profile:      $PROFILE"
 echo "  gpu_backend:  $GPU_BACKEND"
+echo "  mineru_backend: $MINERU_BACKEND"
 echo "  pdf2md:       ${BIN_DIR}/pdf2md"
 echo "  repo:         $REPO"
 echo "Run: pdf2md doctor"

@@ -98,8 +98,10 @@ Details: [references/cli.md](references/cli.md). Examples: [references/examples.
 
 MinerU backend from `.pdf2md/platform.json`:
 
-| Profile | Engine |
+| Profile | Inference |
 |---|---|
-| `mac_arm` | `hybrid-auto-engine` |
-| `linux_gpu` | `hybrid-auto-engine` |
-| `linux_cpu` | `pipeline` |
+| `mac_arm` | MLX |
+| `linux_gpu` | HuggingFace transformers + CUDA |
+| `linux_cpu` | HuggingFace transformers (CPU) |
+
+All profiles use MinerU `vlm-auto-engine` (MLX on Apple Silicon, transformers elsewhere).

@@ -102,7 +102,7 @@ has_nvidia_gpu() {
 prompt_cpu_fallback() {
   echo ""
   echo "NVIDIA GPU detected but CUDA runtime/toolkit not found."
-  echo "Install NVIDIA driver + CUDA toolkit, or continue with CPU (linux_cpu / pipeline backend)."
+  echo "Install NVIDIA driver + CUDA toolkit, or continue with CPU (linux_cpu / HF transformers)."
   echo ""
   if [[ "$NONINTERACTIVE" -eq 1 ]]; then
     echo "Non-interactive mode: re-run with --cpu or install CUDA first." >&2
@@ -129,20 +129,20 @@ TORCH_INDEX=""
 if [[ "$OS" == "darwin" && "$ARCH" == "arm64" ]]; then
   PROFILE="mac_arm"
   GPU_BACKEND="mlx"
-  MINERU_BACKEND="hybrid-auto-engine"
+  MINERU_BACKEND="vlm-auto-engine"
   MINERU_EXTRAS='["core","mlx"]'
 elif [[ "$OS" == "linux" ]]; then
   if [[ "$FORCE_CPU" -eq 1 ]]; then
     PROFILE="linux_cpu"
     GPU_BACKEND="cpu"
-    MINERU_BACKEND="pipeline"
+    MINERU_BACKEND="vlm-auto-engine"
     MINERU_EXTRAS='["core"]'
   elif has_nvidia_gpu; then
     if cuda_ver="$(detect_cuda_version)"; then
       PROFILE="linux_gpu"
       GPU_BACKEND="nvidia"
-      MINERU_BACKEND="hybrid-auto-engine"
-      MINERU_EXTRAS='["core","vllm"]'
+      MINERU_BACKEND="vlm-auto-engine"
+      MINERU_EXTRAS='["core"]'
       CUDA_DETECTED="true"
       CUDA_VERSION="$cuda_ver"
       TORCH_INDEX="$(map_cuda_to_torch_index "$cuda_ver")"
@@ -150,13 +150,13 @@ elif [[ "$OS" == "linux" ]]; then
       prompt_cpu_fallback
       PROFILE="linux_cpu"
       GPU_BACKEND="cpu"
-      MINERU_BACKEND="pipeline"
+      MINERU_BACKEND="vlm-auto-engine"
       MINERU_EXTRAS='["core"]'
     fi
   else
     PROFILE="linux_cpu"
     GPU_BACKEND="cpu"
-    MINERU_BACKEND="pipeline"
+    MINERU_BACKEND="vlm-auto-engine"
     MINERU_EXTRAS='["core"]'
   fi
 else

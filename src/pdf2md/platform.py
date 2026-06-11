@@ -36,7 +36,7 @@ REPO_ROOT = _find_repo_root()
 MANIFEST_PATH = REPO_ROOT / ".pdf2md" / "platform.json"
 
 VALID_PROFILES = frozenset({"mac_arm", "linux_cpu", "linux_gpu"})
-VALID_BACKENDS = frozenset({"pipeline", "hybrid-auto-engine"})
+VALID_BACKENDS = frozenset({"vlm-auto-engine"})
 
 
 @dataclass(frozen=True)
@@ -75,7 +75,7 @@ def _parse_manifest(data: dict[str, Any]) -> PlatformInfo:
     profile = data["profile"]
     if profile not in VALID_PROFILES:
         raise ValueError(f"Unknown profile in manifest: {profile}")
-    backend = data.get("mineru_backend", "pipeline")
+    backend = data.get("mineru_backend", "vlm-auto-engine")
     if backend not in VALID_BACKENDS:
         raise ValueError(f"Unknown mineru_backend in manifest: {backend}")
     return PlatformInfo(
@@ -107,7 +107,7 @@ def _probe_runtime() -> PlatformInfo:
             os="darwin",
             arch="arm64",
             gpu_backend="mlx",
-            mineru_backend="hybrid-auto-engine",
+            mineru_backend="vlm-auto-engine",
             mineru_extras=["core", "mlx"],
             detected_at=datetime.now(timezone.utc).isoformat(),
         )
@@ -130,8 +130,8 @@ def _probe_runtime() -> PlatformInfo:
             os="linux",
             arch=arch,
             gpu_backend="nvidia",
-            mineru_backend="hybrid-auto-engine",
-            mineru_extras=["core", "vllm"],
+            mineru_backend="vlm-auto-engine",
+            mineru_extras=["core"],
             cuda_detected=True,
             detected_at=datetime.now(timezone.utc).isoformat(),
         )
@@ -141,7 +141,7 @@ def _probe_runtime() -> PlatformInfo:
         os="linux" if system.startswith("linux") else system,
         arch=arch,
         gpu_backend="cpu",
-        mineru_backend="pipeline",
+        mineru_backend="vlm-auto-engine",
         mineru_extras=["core"],
         detected_at=datetime.now(timezone.utc).isoformat(),
     )

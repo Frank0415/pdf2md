@@ -52,11 +52,11 @@ Each skill is self-contained: `SKILL.md`, `references/`, and `scripts/` (install
 ~/.agents/skills/pdf2md/scripts/install.sh --repo "$PDF2MD_REPO"
 ```
 
-| Profile | When | MinerU backend |
+| Profile | When | Inference |
 |---|---|---|
-| `mac_arm` | macOS Apple Silicon | `hybrid-auto-engine` (MLX) |
-| `linux_gpu` | Linux + NVIDIA + CUDA | `hybrid-auto-engine` (vLLM) |
-| `linux_cpu` | Linux, no CUDA | `pipeline` |
+| `mac_arm` | macOS Apple Silicon | MLX (`vlm-auto-engine`) |
+| `linux_gpu` | Linux + NVIDIA + CUDA | HuggingFace transformers + CUDA |
+| `linux_cpu` | Linux, no CUDA | HuggingFace transformers (CPU) |
 
 Force CPU on Linux: `.../install.sh --repo "$PDF2MD_REPO" --cpu`
 
