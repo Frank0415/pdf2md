@@ -43,9 +43,14 @@ out/
 └── images/
 ```
 
-## Agent skill
+## Agent skills
 
-See [`skill/SKILL.md`](skill/SKILL.md) for how agents should read `security_report.json`.
+Anthropic-format skills in [`skill/`](skill/):
+
+| Skill | Purpose |
+|---|---|
+| [`pdf2md`](skill/pdf2md/) | Security scan → MinerU → `document.md` (full: agent polishes notes; `/pdf2md lite`: raw) |
+| [`pdf2md-safety`](skill/pdf2md-safety/) | Security scan only → `security_report.json` |
 
 ## Development
 
