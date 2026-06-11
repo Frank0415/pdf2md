@@ -44,13 +44,7 @@ def _cmd_convert(args: argparse.Namespace) -> int:
         print("Blocked: security scan severity HIGH. Re-run with --force to convert anyway.", file=sys.stderr)
         return 2
 
-    convert_pdf(
-        pdf_path,
-        output_dir,
-        mode=args.mode,
-        backend_override=args.backend,
-        lang=args.lang,
-    )
+    convert_pdf(pdf_path, output_dir)
     print(f"Wrote {output_dir / 'document.md'}")
     return 0
 
@@ -72,21 +66,13 @@ def _cmd_doctor(_args: argparse.Namespace) -> int:
         print(f"manifest: missing ({MANIFEST_PATH}) — run scripts/install.sh")
         ok = False
 
-    for cmd in ("tesseract", "java", "mineru"):
+    for cmd in ("tesseract", "mineru"):
         if shutil.which(cmd):
             print(f"  ok: {cmd}")
         else:
             print(f"  missing: {cmd}")
-            if cmd in ("tesseract", "java"):
+            if cmd in ("tesseract", "mineru"):
                 ok = False
-
-    import os
-
-    kdl_url = os.getenv("KDL_NANO_ENDPOINT_URL", "")
-    if kdl_url:
-        print(f"  ok: KDL_NANO_ENDPOINT_URL={kdl_url}")
-    else:
-        print("  frontier mode: set KDL_NANO_ENDPOINT_URL (vLLM serving KDL-Frontier-Parser-nano)")
 
     if shutil.which("nvidia-smi"):
         try:
@@ -114,9 +100,6 @@ def build_parser() -> argparse.ArgumentParser:
     convert = sub.add_parser("convert", help="Scan then convert to markdown")
     convert.add_argument("pdf", type=Path)
     convert.add_argument("-o", "--output", type=Path, required=True)
-    convert.add_argument("--mode", choices=["academic", "safe", "frontier"], default="academic")
-    convert.add_argument("--backend", choices=["pipeline", "hybrid-auto-engine"])
-    convert.add_argument("--lang", default="en")
     convert.add_argument("--no-ocr-diff", action="store_true")
     convert.add_argument("--ocr-diff-full", action="store_true")
     convert.add_argument("--force", action="store_true")

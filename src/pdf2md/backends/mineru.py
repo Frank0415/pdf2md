@@ -7,23 +7,18 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from pdf2md.platform import load_platform, resolve_mineru_backend
+from pdf2md.platform import load_platform
+
+DEFAULT_LANG = "en"
 
 
-def convert_pdf(
-    pdf_path: Path,
-    output_dir: Path,
-    *,
-    mode: str = "academic",
-    backend_override: str | None = None,
-    lang: str = "en",
-) -> Path:
+def convert_pdf(pdf_path: Path, output_dir: Path) -> Path:
     pdf_path = Path(pdf_path).resolve()
     output_dir = Path(output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
     platform = load_platform()
-    backend = resolve_mineru_backend(mode, override=backend_override, platform=platform)
+    backend = platform.mineru_backend
 
     mineru_out = output_dir / "_mineru"
     if mineru_out.exists():
@@ -39,7 +34,7 @@ def convert_pdf(
         "-b",
         backend,
         "-l",
-        lang,
+        DEFAULT_LANG,
     ]
     env = _mineru_env()
     subprocess.run(cmd, check=True, env=env)

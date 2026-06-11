@@ -2,21 +2,19 @@
 
 PDF security scan + markdown conversion for agents and note pipelines.
 
-Two-stage flow: **scan** (low-contrast + optional OCR diff) → **convert** (`academic` MinerU, `safe` OpenDataLoader, or `frontier` KDL-Frontier-Parser-nano).
+Two-stage flow: **scan** (low-contrast + optional OCR diff) → **convert** (MinerU).
 
 ## Supported platforms
 
-| Profile | OS | GPU | Academic backend |
+| Profile | OS | GPU | MinerU backend |
 |---|---|---|---|
 | `mac_arm` | macOS Apple Silicon | MLX | `hybrid-auto-engine` |
 | `linux_gpu` | Linux | NVIDIA + CUDA | `hybrid-auto-engine` |
 | `linux_cpu` | Linux | CPU | `pipeline` |
 
-macOS Intel and Windows are not supported in v1.
-
 ## Install
 
-Requires [uv](https://docs.astral.sh/uv/) and system **tesseract** + **java** (for safe mode).
+Requires [uv](https://docs.astral.sh/uv/) and system **tesseract**.
 
 ```bash
 git clone <repo> ~/Tools/pdf2md
@@ -30,27 +28,9 @@ Linux with NVIDIA but no CUDA: install prompts to add CUDA or re-run with `./scr
 ## Usage
 
 ```bash
-# Scan + convert
 pdf2md convert paper.pdf -o ./out
-
-# Scan only
 pdf2md scan paper.pdf
-
-# Safe mode (OpenDataLoader, Java)
-pdf2md convert paper.pdf -o ./out --mode safe
-
-# Frontier mode (KDL-Frontier-Parser-nano via vLLM)
-export KDL_NANO_ENDPOINT_URL=http://localhost:8000/v1
-pdf2md convert paper.pdf -o ./out --mode frontier
-```
-
-Frontier mode expects a running vLLM server:
-
-```bash
-vllm serve KDLAI/KDL-Frontier-Parser-nano \
-  --served-model-name kdl-frontier-parser-nano \
-  --max-model-len 8192 --trust-remote-code \
-  --limit-mm-per-prompt '{"image":1}'
+pdf2md doctor
 ```
 
 Output:

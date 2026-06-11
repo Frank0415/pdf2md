@@ -26,14 +26,6 @@ check_cmd tesseract || {
   fi
 }
 
-check_cmd java || {
-  if [[ "$OS" == "Darwin" ]]; then
-    echo "    install: brew install openjdk@17"
-  else
-    echo "    install: sudo apt install openjdk-17-jre"
-  fi
-}
-
 if command -v nvidia-smi >/dev/null 2>&1; then
   echo "  ok: nvidia-smi"
   nvidia-smi --query-gpu=name,driver_version --format=csv,noheader 2>/dev/null | sed 's/^/    /' || true

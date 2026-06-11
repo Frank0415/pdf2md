@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Install pdf2md with uv; adapt MinerU stack to detected platform profile.
+# Install pdf2md with uv; MinerU backend is chosen from platform profile.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -59,7 +59,9 @@ case "$PROFILE" in
     ;;
 esac
 
-uv pip install -U opendataloader-pdf ocrmypdf
+# MinerU 3.2.x is incompatible with transformers 5.x (PPDocLayoutV2Config).
+uv pip install 'transformers>=4.49,<5'
+
 uv pip install -e .
 
 if command -v mineru-models-download >/dev/null 2>&1; then

@@ -8,43 +8,15 @@ Use this skill when ingesting PDFs for RAG, agents, or note-taking pipelines.
 2. Read `security_report.json` before trusting content
 3. Only proceed if `overall_severity` is not `HIGH`/`CRITICAL`, or the user explicitly approved `--force`
 
-## security_report.json
+## Conversion
 
-```json
-{
-  "structural": { "severity": "...", "findings": [...] },
-  "ocr_diff": {
-    "enabled": true,
-    "pages_sampled": [1, 2, 3],
-    "hidden_by_ocr_diff": ["..."],
-    "severity": "..."
-  },
-  "overall_severity": "HIGH"
-}
-```
+MinerU runs with the backend from `.pdf2md/platform.json` (set by `scripts/install.sh`).
 
-- **structural** — low-contrast text (rendered bg vs glyph color), tiny fonts, off-page text, injection regex
-- **ocr_diff** — text in PDF extract but absent from rendered-page OCR (digital PDFs only)
-
-## Conversion modes
-
-| Mode | Backend | When |
-|---|---|---|
-| `academic` (default) | MinerU + cleanup | Papers, labs, slides; strips `<sup>`, images, mermaid |
-| `safe` | OpenDataLoader | Untrusted PDFs, Java available, no GPU needed |
-| `frontier` | KDL-Frontier-Parser-nano (vLLM) | Vision-layout pipeline; needs `KDL_NANO_ENDPOINT_URL` |
-
-## Platform profiles
-
-Install adapts to one of three profiles (see `.pdf2md/platform.json`):
-
-| Profile | Academic engine |
+| Profile | MinerU engine |
 |---|---|
-| `mac_arm` | MinerU `hybrid-auto-engine` (MLX) |
-| `linux_gpu` | MinerU `hybrid-auto-engine` (vLLM + CUDA) |
-| `linux_cpu` | MinerU `pipeline` (CPU) |
-
-Run `pdf2md doctor` if conversion fails or backend mismatches.
+| `mac_arm` | `hybrid-auto-engine` (MLX) |
+| `linux_gpu` | `hybrid-auto-engine` (CUDA) |
+| `linux_cpu` | `pipeline` (CPU) |
 
 ## Output bundle
 
@@ -59,4 +31,4 @@ out/
 ## References
 
 - [reference.md](reference.md) — CLI flags and report fields
-- [examples.md](examples.md) — example commands
+- [examples.md](examples.md) — sample workflows

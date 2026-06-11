@@ -15,16 +15,10 @@ pdf2md scan lecture.pdf
 pdf2md scan lecture.pdf -o ./scan-out
 ```
 
-## Convert (academic, MLX)
+## Convert
 
 ```bash
 pdf2md convert paper.pdf -o ./out
-```
-
-## Safe mode (no MinerU GPU)
-
-```bash
-pdf2md convert untrusted.pdf -o ./out --mode safe
 ```
 
 ## Linux NVIDIA
@@ -38,5 +32,11 @@ pdf2md convert paper.pdf -o ./out
 
 ```bash
 ./scripts/install.sh --cpu
-pdf2md convert paper.pdf -o ./out --backend pipeline
+pdf2md convert paper.pdf -o ./out
+```
+
+## Slides with OCR false positives
+
+```bash
+pdf2md convert slides.pdf -o ./out --no-ocr-diff --force
 ```

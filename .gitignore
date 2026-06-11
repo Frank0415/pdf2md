@@ -11,6 +11,9 @@ build/
 # Local platform manifest
 .pdf2md/
 
+# Secrets
+.env
+
 # Local test fixtures and conversion outputs (never commit)
 test/
 

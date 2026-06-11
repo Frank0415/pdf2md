@@ -158,17 +158,3 @@ def load_platform(*, allow_probe: bool = True) -> PlatformInfo:
     )
 
 
-def resolve_mineru_backend(
-    mode: str,
-    *,
-    override: str | None = None,
-    platform: PlatformInfo | None = None,
-) -> str:
-    if override:
-        if override not in VALID_BACKENDS:
-            raise ValueError(f"Invalid backend override: {override}")
-        return override
-    info = platform or load_platform()
-    if mode == "safe":
-        return "pipeline"
-    return info.mineru_backend

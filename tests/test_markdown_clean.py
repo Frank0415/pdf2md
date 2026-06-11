@@ -33,8 +33,32 @@ graph TD
 Bullet line
 """
     cleaned = to_clear_markdown(raw)
-    assert "![](images/" not in cleaned
+    assert "![](images/foo.jpg)" in cleaned
     assert "<details>" not in cleaned
+    assert "hidden" not in cleaned
     assert "```mermaid" not in cleaned
     assert "## Title" in cleaned
     assert "Bullet line" in cleaned
+
+
+def test_strips_mineru_image_descriptions():
+    raw = """![diagram](images/foo.jpg)
+
+<details>
+<summary>natural_image</summary>
+
+Cartoon illustration of a yellow elephant with a cheerful expression (no text or symbols)
+</details>
+
+## Title
+"""
+    cleaned = to_clear_markdown(raw)
+    assert "![](images/foo.jpg)" in cleaned
+    assert "## Title" in cleaned
+    assert "illustration" not in cleaned
+    assert "natural_image" not in cleaned
+
+
+def test_strips_image_alt_text():
+    raw = "![A Hadoop flowchart](images/foo.jpg)\n"
+    assert to_clear_markdown(raw) == "![](images/foo.jpg)\n"
