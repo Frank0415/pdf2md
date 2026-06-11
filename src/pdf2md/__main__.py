@@ -80,6 +80,14 @@ def _cmd_doctor(_args: argparse.Namespace) -> int:
             if cmd in ("tesseract", "java"):
                 ok = False
 
+    import os
+
+    kdl_url = os.getenv("KDL_NANO_ENDPOINT_URL", "")
+    if kdl_url:
+        print(f"  ok: KDL_NANO_ENDPOINT_URL={kdl_url}")
+    else:
+        print("  frontier mode: set KDL_NANO_ENDPOINT_URL (vLLM serving KDL-Frontier-Parser-nano)")
+
     if shutil.which("nvidia-smi"):
         try:
             out = subprocess.check_output(["nvidia-smi", "-L"], text=True)
@@ -106,7 +114,7 @@ def build_parser() -> argparse.ArgumentParser:
     convert = sub.add_parser("convert", help="Scan then convert to markdown")
     convert.add_argument("pdf", type=Path)
     convert.add_argument("-o", "--output", type=Path, required=True)
-    convert.add_argument("--mode", choices=["academic", "safe"], default="academic")
+    convert.add_argument("--mode", choices=["academic", "safe", "frontier"], default="academic")
     convert.add_argument("--backend", choices=["pipeline", "hybrid-auto-engine"])
     convert.add_argument("--lang", default="en")
     convert.add_argument("--no-ocr-diff", action="store_true")

@@ -2,7 +2,7 @@
 
 PDF security scan + markdown conversion for agents and note pipelines.
 
-Two-stage flow: **scan** (low-contrast + optional OCR diff) → **convert** (`academic` MinerU or `safe` OpenDataLoader).
+Two-stage flow: **scan** (low-contrast + optional OCR diff) → **convert** (`academic` MinerU, `safe` OpenDataLoader, or `frontier` KDL-Frontier-Parser-nano).
 
 ## Supported platforms
 
@@ -38,6 +38,19 @@ pdf2md scan paper.pdf
 
 # Safe mode (OpenDataLoader, Java)
 pdf2md convert paper.pdf -o ./out --mode safe
+
+# Frontier mode (KDL-Frontier-Parser-nano via vLLM)
+export KDL_NANO_ENDPOINT_URL=http://localhost:8000/v1
+pdf2md convert paper.pdf -o ./out --mode frontier
+```
+
+Frontier mode expects a running vLLM server:
+
+```bash
+vllm serve KDLAI/KDL-Frontier-Parser-nano \
+  --served-model-name kdl-frontier-parser-nano \
+  --max-model-len 8192 --trust-remote-code \
+  --limit-mm-per-prompt '{"image":1}'
 ```
 
 Output:

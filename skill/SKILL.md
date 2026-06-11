@@ -32,6 +32,7 @@ Use this skill when ingesting PDFs for RAG, agents, or note-taking pipelines.
 |---|---|---|
 | `academic` (default) | MinerU + cleanup | Papers, labs, slides; strips `<sup>`, images, mermaid |
 | `safe` | OpenDataLoader | Untrusted PDFs, Java available, no GPU needed |
+| `frontier` | KDL-Frontier-Parser-nano (vLLM) | Vision-layout pipeline; needs `KDL_NANO_ENDPOINT_URL` |
 
 ## Platform profiles
 
