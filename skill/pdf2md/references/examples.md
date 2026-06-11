@@ -5,7 +5,7 @@
 ```bash
 pdf2md convert paper.pdf -o ./out
 # read security_report.json, then polish document.md per format-full.md
-python skill/pdf2md/scripts/validate_bundle.py ./out
+python ~/.agents/skills/pdf2md/scripts/validate_bundle.py ./out
 ```
 
 ## Lite mode
@@ -15,7 +15,7 @@ User says `/pdf2md lite` or wants raw MinerU output:
 ```bash
 pdf2md convert paper.pdf -o ./out
 # use document.md as-is — skip polish step
-python skill/pdf2md/scripts/validate_bundle.py ./out
+python ~/.agents/skills/pdf2md/scripts/validate_bundle.py ./out
 ```
 
 ## Slides (OCR false positives)

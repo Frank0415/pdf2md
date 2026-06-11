@@ -4,7 +4,7 @@
 
 ```bash
 pdf2md scan untrusted.pdf -o ./scan-out
-python skill/pdf2md-safety/scripts/validate_report.py ./scan-out
+python ~/.agents/skills/pdf2md-safety/scripts/validate_report.py ./scan-out
 ```
 
 ## Scan to stdout

@@ -19,6 +19,13 @@ Stdout JSON when `-o` is omitted:
 pdf2md scan paper.pdf
 ```
 
+Install:
+
+```bash
+export PDF2MD_REPO=/path/to/pdf2md
+~/.agents/skills/pdf2md-safety/scripts/install.sh --repo "$PDF2MD_REPO"
+```
+
 Requires `pdf2md` and `tesseract` on PATH. Does not require `mineru`.
 
 ## Workflow
@@ -59,7 +66,7 @@ Always include:
 **Step 5 — Validate**
 
 ```bash
-python skill/pdf2md-safety/scripts/validate_report.py ./scan-out
+python ~/.agents/skills/pdf2md-safety/scripts/validate_report.py ./scan-out
 ```
 
 ## Output

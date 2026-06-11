@@ -29,7 +29,13 @@ pdf2md convert paper.pdf -o ./out
 
 Then **full mode**: polish `document.md` per [references/format-full.md](references/format-full.md).
 
-Install: `./scripts/install.sh` then `pdf2md doctor`.
+Install (from deployed skill):
+
+```bash
+export PDF2MD_REPO=/path/to/pdf2md
+~/.agents/skills/pdf2md/scripts/install.sh --repo "$PDF2MD_REPO"
+pdf2md doctor
+```
 
 ## Workflow
 
@@ -75,7 +81,7 @@ Do not delete `![](images/...)` lines. Do not invent facts — restructure and c
 **Step 6 — Validate**
 
 ```bash
-python skill/pdf2md/scripts/validate_bundle.py ./out
+python ~/.agents/skills/pdf2md/scripts/validate_bundle.py ./out
 ```
 
 ## CLI flags
