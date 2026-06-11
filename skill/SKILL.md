@@ -23,15 +23,15 @@ Use this skill when ingesting PDFs for RAG, agents, or note-taking pipelines.
 }
 ```
 
-- **structural** — white/invisible text, tiny fonts, off-page text, injection regex (pdf-injection-scanner)
+- **structural** — low-contrast text (rendered bg vs glyph color), tiny fonts, off-page text, injection regex
 - **ocr_diff** — text in PDF extract but absent from rendered-page OCR (digital PDFs only)
-- Slide decks may trigger structural false positives (white text on colored backgrounds); confirm with the user before blocking
 
 ## Conversion modes
 
 | Mode | Backend | When |
 |---|---|---|
-| `academic` (default) | MinerU | Papers, slides, formulas, tables |
+| `academic` (default) | MinerU + cleanup | Papers with tables/formulas; strips `<sup>`, images, mermaid |
+| `clear` | MarkItDown | Plain readable markdown from PDF text layer (best for slides) |
 | `safe` | OpenDataLoader | Untrusted PDFs, Java available, no GPU needed |
 
 ## Platform profiles

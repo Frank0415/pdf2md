@@ -2,7 +2,7 @@
 
 PDF security scan + markdown conversion for agents and note pipelines.
 
-Two-stage flow: **scan** (structural injection + optional OCR diff) → **convert** (MinerU academic or OpenDataLoader safe).
+Two-stage flow: **scan** (low-contrast + optional OCR diff) → **convert** (`academic` MinerU, `clear` MarkItDown, or `safe` OpenDataLoader).
 
 ## Supported platforms
 
@@ -36,11 +36,11 @@ pdf2md convert paper.pdf -o ./out
 # Scan only
 pdf2md scan paper.pdf
 
+# Clear markdown for slides (MarkItDown text extraction)
+pdf2md convert slides.pdf -o ./out --mode clear
+
 # Safe mode (OpenDataLoader, Java)
 pdf2md convert paper.pdf -o ./out --mode safe
-
-# Slide decks may trigger structural false positives
-pdf2md convert slides.pdf -o ./out --force
 ```
 
 Output:
