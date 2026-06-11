@@ -74,7 +74,7 @@ out/
 
 Skip this step in **lite** mode (`/pdf2md lite`).
 
-Read `document.md`. Rewrite **in place** so it reads like real notes, not raw slide OCR. Rules and examples: [references/format-full.md](references/format-full.md).
+Read `document.md`. Rewrite **in place** so it reads like real notes, not raw slide OCR. Rules and examples: [references/format-full.md](references/format-full.md). Stitch logically attached things (such as split sentences or code blocks) back together across page boundaries.
 
 Do not delete `![](images/...)` lines. Do not invent facts — restructure and clean only.
 

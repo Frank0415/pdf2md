@@ -75,7 +75,9 @@ map_cuda_to_torch_index() {
   if [[ "$major" -eq 11 ]]; then echo "cu118"; return; fi
   if [[ "$major" -eq 12 && "$minor" -le 1 ]]; then echo "cu121"; return; fi
   if [[ "$major" -eq 12 && "$minor" -le 4 ]]; then echo "cu124"; return; fi
-  echo "cu126"
+  if [[ "$major" -eq 12 ]]; then echo "cu126"; return; fi
+  # Dynamic indexing for CUDA >= 13 (e.g., cu130, cu140)
+  echo "cu${major}0"
 }
 
 detect_cuda_version() {

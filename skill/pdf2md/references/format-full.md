@@ -73,6 +73,7 @@ Keep `##` / `###` hierarchy. Merge duplicate headings on adjacent slides when th
 ## Continuity
 
 - Join lines broken mid-sentence across slide boundaries
+- Stitch logically attached things (like code blocks, program snippets, and logical prose) split across page/slide boundaries back together.
 - Remove duplicate bullets that repeat the same idea
 - Drop slide chrome (course name, date, "Thank you!") unless the user wants slide metadata
 - Fix obvious OCR typos only when confident; do not guess technical terms
