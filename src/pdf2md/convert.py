@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 from pdf2md.backends import mineru, opendataloader
+from pdf2md.markdown_clean import clean_document_markdown
 from pdf2md.platform import load_platform
 
 Mode = Literal["academic", "safe"]
@@ -38,6 +39,8 @@ def convert_pdf(
             lang=lang,
         )
         mineru_backend = platform.mineru_backend if backend_override is None else backend_override
+
+    clean_document_markdown(document_md)
 
     meta = {
         "source_pdf": str(pdf_path),
