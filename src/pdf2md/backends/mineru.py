@@ -59,10 +59,15 @@ def convert_pdf(pdf_path: Path, output_dir: Path) -> Path:
 
 def _mineru_env() -> dict[str, str]:
     """Strip SOCKS/HTTP proxy vars that break MinerU's httpx client without socksio."""
+    import sys
     env = os.environ.copy()
     for key in list(env):
         if "proxy" in key.lower():
             del env[key]
+    
+    # Prepend the virtualenv bin directory to PATH so subprocesses can find mineru
+    bin_dir = str(Path(sys.executable).parent)
+    env["PATH"] = bin_dir + os.pathsep + env.get("PATH", "")
     return env
 
 

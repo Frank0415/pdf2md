@@ -73,6 +73,7 @@ Keep `##` / `###` hierarchy. Merge duplicate headings on adjacent slides when th
 ## Continuity
 
 - Join lines broken mid-sentence across slide boundaries
+- Stitch code blocks, program snippets, and logical paragraph prose split across page/slide boundaries back into a single unified block (for example, a Java try-catch-finally block or code class structure split by a page boundary should be merged into a single continuous code block).
 - Remove duplicate bullets that repeat the same idea
 - Drop slide chrome (course name, date, "Thank you!") unless the user wants slide metadata
 - Fix obvious OCR typos only when confident; do not guess technical terms
