@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -40,7 +41,8 @@ def convert_pdf(
         "-l",
         lang,
     ]
-    subprocess.run(cmd, check=True)
+    env = _mineru_env()
+    subprocess.run(cmd, check=True, env=env)
 
     md_path = _find_markdown(mineru_out)
     if md_path is None:
@@ -59,6 +61,15 @@ def convert_pdf(
         images_dst.mkdir(exist_ok=True)
 
     return document_md
+
+
+def _mineru_env() -> dict[str, str]:
+    """Strip SOCKS/HTTP proxy vars that break MinerU's httpx client without socksio."""
+    env = os.environ.copy()
+    for key in list(env):
+        if "proxy" in key.lower():
+            del env[key]
+    return env
 
 
 def _find_markdown(root: Path) -> Path | None:
