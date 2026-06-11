@@ -106,12 +106,7 @@ def build_parser() -> argparse.ArgumentParser:
     convert = sub.add_parser("convert", help="Scan then convert to markdown")
     convert.add_argument("pdf", type=Path)
     convert.add_argument("-o", "--output", type=Path, required=True)
-    convert.add_argument(
-        "--mode",
-        choices=["academic", "safe", "clear"],
-        default="academic",
-        help="academic=MinerU, safe=OpenDataLoader, clear=MarkItDown plain text",
-    )
+    convert.add_argument("--mode", choices=["academic", "safe"], default="academic")
     convert.add_argument("--backend", choices=["pipeline", "hybrid-auto-engine"])
     convert.add_argument("--lang", default="en")
     convert.add_argument("--no-ocr-diff", action="store_true")

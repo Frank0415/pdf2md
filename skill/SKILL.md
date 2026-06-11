@@ -30,8 +30,7 @@ Use this skill when ingesting PDFs for RAG, agents, or note-taking pipelines.
 
 | Mode | Backend | When |
 |---|---|---|
-| `academic` (default) | MinerU + cleanup | Papers with tables/formulas; strips `<sup>`, images, mermaid |
-| `clear` | MarkItDown | Plain readable markdown from PDF text layer (best for slides) |
+| `academic` (default) | MinerU + cleanup | Papers, labs, slides; strips `<sup>`, images, mermaid |
 | `safe` | OpenDataLoader | Untrusted PDFs, Java available, no GPU needed |
 
 ## Platform profiles

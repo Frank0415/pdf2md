@@ -13,7 +13,7 @@ pdf2md doctor
 | Flag | Description |
 |---|---|
 | `-o, --output` | Output directory (required) |
-| `--mode academic\|clear\|safe` | `academic`=MinerU, `clear`=MarkItDown, `safe`=OpenDataLoader |
+| `--mode academic\|safe` | `academic`=MinerU, `safe`=OpenDataLoader |
 | `--backend pipeline\|hybrid-auto-engine` | Override MinerU engine |
 | `--lang en` | OCR language hint for MinerU |
 | `--no-ocr-diff` | Skip OCR diff layer in scan |

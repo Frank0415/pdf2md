@@ -15,12 +15,6 @@ pdf2md scan lecture.pdf
 pdf2md scan lecture.pdf -o ./scan-out
 ```
 
-## Convert slides (clear markdown)
-
-```bash
-pdf2md convert slides.pdf -o ./out --mode clear
-```
-
 ## Convert (academic, MLX)
 
 ```bash

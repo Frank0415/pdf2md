@@ -1,4 +1,4 @@
-"""Post-process converted markdown into clear, MarkItDown-style document text."""
+"""Post-process converted markdown into plain document text."""
 
 from __future__ import annotations
 
@@ -26,7 +26,7 @@ def strip_sup_markup(text: str) -> str:
 
 
 def to_clear_markdown(text: str) -> str:
-    """Normalize VLM-heavy output toward plain MarkItDown-style markdown."""
+    """Strip VLM artifacts from MinerU output (sup, images, mermaid, details)."""
     cleaned = strip_sup_markup(text)
     cleaned = _DETAILS_BLOCK.sub("", cleaned)
     cleaned = _MERMAID_BLOCK.sub("", cleaned)

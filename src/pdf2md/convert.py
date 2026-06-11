@@ -7,11 +7,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Literal
 
-from pdf2md.backends import markitdown_conv, mineru, opendataloader
+from pdf2md.backends import mineru, opendataloader
 from pdf2md.markdown_clean import clean_document_markdown
 from pdf2md.platform import load_platform
 
-Mode = Literal["academic", "safe", "clear"]
+Mode = Literal["academic", "safe"]
 
 
 def convert_pdf(
@@ -27,10 +27,7 @@ def convert_pdf(
     output_dir.mkdir(parents=True, exist_ok=True)
 
     platform = load_platform()
-    if mode == "clear":
-        document_md = markitdown_conv.convert_pdf(pdf_path, output_dir)
-        mineru_backend = None
-    elif mode == "safe":
+    if mode == "safe":
         document_md = opendataloader.convert_pdf(pdf_path, output_dir)
         mineru_backend = None
     else:
@@ -43,8 +40,7 @@ def convert_pdf(
         )
         mineru_backend = platform.mineru_backend if backend_override is None else backend_override
 
-    if mode != "clear":
-        clean_document_markdown(document_md)
+    clean_document_markdown(document_md)
 
     meta = {
         "source_pdf": str(pdf_path),
