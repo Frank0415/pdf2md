@@ -36,7 +36,10 @@ REPO_ROOT = _find_repo_root()
 MANIFEST_PATH = REPO_ROOT / ".pdf2md" / "platform.json"
 
 VALID_PROFILES = frozenset({"mac_arm", "linux_cpu", "linux_gpu"})
-VALID_BACKENDS = frozenset({"vlm-auto-engine"})
+VALID_INFERENCE = frozenset({"mlx", "transformers"})
+
+# MinerU CLI backend; engine selection is via installed extras (mlx vs core-only).
+MINERU_CLI_BACKEND = "vlm-auto-engine"
 
 
 @dataclass(frozen=True)
@@ -45,7 +48,7 @@ class PlatformInfo:
     os: str
     arch: str
     gpu_backend: str
-    mineru_backend: str
+    inference: str
     mineru_extras: list[str]
     cuda_detected: bool = False
     cuda_version: str | None = None
@@ -58,7 +61,7 @@ class PlatformInfo:
             "os": self.os,
             "arch": self.arch,
             "gpu_backend": self.gpu_backend,
-            "mineru_backend": self.mineru_backend,
+            "inference": self.inference,
             "mineru_extras": self.mineru_extras,
             "cuda_detected": self.cuda_detected,
         }
@@ -71,19 +74,30 @@ class PlatformInfo:
         return data
 
 
+def _resolve_inference(data: dict[str, Any]) -> str:
+    if "inference" in data:
+        inference = data["inference"]
+        if inference not in VALID_INFERENCE:
+            raise ValueError(f"Unknown inference in manifest: {inference}")
+        return inference
+
+    # Legacy manifests (mineru_backend / gpu_backend only).
+    if data.get("gpu_backend") == "mlx":
+        return "mlx"
+    return "transformers"
+
+
 def _parse_manifest(data: dict[str, Any]) -> PlatformInfo:
     profile = data["profile"]
     if profile not in VALID_PROFILES:
         raise ValueError(f"Unknown profile in manifest: {profile}")
-    backend = data.get("mineru_backend", "vlm-auto-engine")
-    if backend not in VALID_BACKENDS:
-        raise ValueError(f"Unknown mineru_backend in manifest: {backend}")
+    inference = _resolve_inference(data)
     return PlatformInfo(
         profile=profile,
         os=data["os"],
         arch=data["arch"],
         gpu_backend=data.get("gpu_backend", "cpu"),
-        mineru_backend=backend,
+        inference=inference,
         mineru_extras=list(data.get("mineru_extras", ["core"])),
         cuda_detected=bool(data.get("cuda_detected", False)),
         cuda_version=data.get("cuda_version"),
@@ -107,7 +121,7 @@ def _probe_runtime() -> PlatformInfo:
             os="darwin",
             arch="arm64",
             gpu_backend="mlx",
-            mineru_backend="vlm-auto-engine",
+            inference="mlx",
             mineru_extras=["core", "mlx"],
             detected_at=datetime.now(timezone.utc).isoformat(),
         )
@@ -130,7 +144,7 @@ def _probe_runtime() -> PlatformInfo:
             os="linux",
             arch=arch,
             gpu_backend="nvidia",
-            mineru_backend="vlm-auto-engine",
+            inference="transformers",
             mineru_extras=["core"],
             cuda_detected=True,
             detected_at=datetime.now(timezone.utc).isoformat(),
@@ -141,7 +155,7 @@ def _probe_runtime() -> PlatformInfo:
         os="linux" if system.startswith("linux") else system,
         arch=arch,
         gpu_backend="cpu",
-        mineru_backend="vlm-auto-engine",
+        inference="transformers",
         mineru_extras=["core"],
         detected_at=datetime.now(timezone.utc).isoformat(),
     )
@@ -156,5 +170,3 @@ def load_platform(*, allow_probe: bool = True) -> PlatformInfo:
     raise FileNotFoundError(
         f"Platform manifest not found at {MANIFEST_PATH}. Run scripts/install.sh first."
     )
-
-

@@ -29,7 +29,7 @@ For scan-only (no conversion), use the **pdf2md-safety** skill and `pdf2md scan`
 
 ```bash
 ./scripts/install.sh
-./scripts/install.sh --cpu   # Linux CPU-only
+./scripts/install.sh --cpu   # Linux without NVIDIA (transformers on CPU, slow)
 ```
 
 ## Dependencies

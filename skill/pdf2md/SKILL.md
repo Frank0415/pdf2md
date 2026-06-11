@@ -96,12 +96,11 @@ Details: [references/cli.md](references/cli.md). Examples: [references/examples.
 
 ## Platform
 
-MinerU backend from `.pdf2md/platform.json`:
+Inference from `.pdf2md/platform.json` (MinerU `vlm-auto-engine` under the hood):
 
 | Profile | Inference |
 |---|---|
 | `mac_arm` | MLX |
-| `linux_gpu` | HuggingFace transformers + CUDA |
-| `linux_cpu` | HuggingFace transformers (CPU) |
+| `linux_gpu` | HuggingFace transformers (CUDA) |
 
-All profiles use MinerU `vlm-auto-engine` (MLX on Apple Silicon, transformers elsewhere).
+Only MLX and HF transformers are supported. vLLM / hybrid / lmdeploy are not used.

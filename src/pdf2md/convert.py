@@ -26,7 +26,7 @@ def convert_pdf(pdf_path: Path, output_dir: Path) -> dict[str, Any]:
         "source_pdf": str(pdf_path),
         "converted_at": datetime.now(timezone.utc).isoformat(),
         "platform": platform.to_dict(),
-        "mineru_backend": platform.mineru_backend,
+        "inference": platform.inference,
         "document_md": str(document_md),
     }
     meta_path = output_dir / "meta.json"

@@ -58,7 +58,7 @@ read_manifest() {
 PROFILE="$(read_manifest profile)"
 GPU_BACKEND="$(read_manifest gpu_backend)"
 TORCH_INDEX="$(read_manifest torch_index)"
-MINERU_BACKEND="$(read_manifest mineru_backend)"
+INFERENCE="$(read_manifest inference)"
 MINERU_EXTRAS="$(read_manifest mineru_extras)"
 
 echo "Installing for profile: $PROFILE"
@@ -83,9 +83,11 @@ case "$PROFILE" in
       uv pip install -U torch torchvision --index-url "https://download.pytorch.org/whl/${TORCH_INDEX}"
     fi
     uv pip install -U "mineru[core]"
+    uv pip uninstall -y vllm lmdeploy 2>/dev/null || true
     ;;
   linux_cpu)
     uv pip install -U "mineru[core]"
+    uv pip uninstall -y vllm lmdeploy 2>/dev/null || true
     ;;
   *)
     echo "Unknown profile: $PROFILE" >&2
@@ -106,7 +108,7 @@ echo ""
 echo "Install complete."
 echo "  profile:      $PROFILE"
 echo "  gpu_backend:  $GPU_BACKEND"
-echo "  mineru_backend: $MINERU_BACKEND"
+echo "  inference:    $INFERENCE"
 echo "  pdf2md:       ${BIN_DIR}/pdf2md"
 echo "  repo:         $REPO"
 echo "Run: pdf2md doctor"

@@ -7,7 +7,7 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from pdf2md.platform import load_platform
+from pdf2md.platform import MINERU_CLI_BACKEND, load_platform
 
 DEFAULT_LANG = "en"
 
@@ -17,8 +17,7 @@ def convert_pdf(pdf_path: Path, output_dir: Path) -> Path:
     output_dir = Path(output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    platform = load_platform()
-    backend = platform.mineru_backend
+    load_platform()  # ensure manifest exists before conversion
 
     mineru_out = output_dir / "_mineru"
     if mineru_out.exists():
@@ -32,7 +31,7 @@ def convert_pdf(pdf_path: Path, output_dir: Path) -> Path:
         "-o",
         str(mineru_out),
         "-b",
-        backend,
+        MINERU_CLI_BACKEND,
         "-l",
         DEFAULT_LANG,
     ]

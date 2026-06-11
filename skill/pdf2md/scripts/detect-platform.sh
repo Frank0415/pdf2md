@@ -120,7 +120,7 @@ prompt_cpu_fallback() {
 
 PROFILE=""
 GPU_BACKEND=""
-MINERU_BACKEND=""
+INFERENCE=""
 MINERU_EXTRAS=""
 CUDA_DETECTED="false"
 CUDA_VERSION=""
@@ -129,19 +129,19 @@ TORCH_INDEX=""
 if [[ "$OS" == "darwin" && "$ARCH" == "arm64" ]]; then
   PROFILE="mac_arm"
   GPU_BACKEND="mlx"
-  MINERU_BACKEND="vlm-auto-engine"
+  INFERENCE="mlx"
   MINERU_EXTRAS='["core","mlx"]'
 elif [[ "$OS" == "linux" ]]; then
   if [[ "$FORCE_CPU" -eq 1 ]]; then
     PROFILE="linux_cpu"
     GPU_BACKEND="cpu"
-    MINERU_BACKEND="vlm-auto-engine"
+    INFERENCE="transformers"
     MINERU_EXTRAS='["core"]'
   elif has_nvidia_gpu; then
     if cuda_ver="$(detect_cuda_version)"; then
       PROFILE="linux_gpu"
       GPU_BACKEND="nvidia"
-      MINERU_BACKEND="vlm-auto-engine"
+      INFERENCE="transformers"
       MINERU_EXTRAS='["core"]'
       CUDA_DETECTED="true"
       CUDA_VERSION="$cuda_ver"
@@ -150,13 +150,13 @@ elif [[ "$OS" == "linux" ]]; then
       prompt_cpu_fallback
       PROFILE="linux_cpu"
       GPU_BACKEND="cpu"
-      MINERU_BACKEND="vlm-auto-engine"
+      INFERENCE="transformers"
       MINERU_EXTRAS='["core"]'
     fi
   else
     PROFILE="linux_cpu"
     GPU_BACKEND="cpu"
-    MINERU_BACKEND="vlm-auto-engine"
+    INFERENCE="transformers"
     MINERU_EXTRAS='["core"]'
   fi
 else
@@ -178,7 +178,7 @@ if [[ "$CUDA_DETECTED" == "true" ]]; then
   "cuda_version": "$CUDA_VERSION",
   "torch_index": "$TORCH_INDEX",
   "mineru_extras": $MINERU_EXTRAS,
-  "mineru_backend": "$MINERU_BACKEND",
+  "inference": "$INFERENCE",
   "detected_at": "$DETECTED_AT"
 }
 EOF
@@ -191,10 +191,10 @@ else
   "gpu_backend": "$GPU_BACKEND",
   "cuda_detected": false,
   "mineru_extras": $MINERU_EXTRAS,
-  "mineru_backend": "$MINERU_BACKEND",
+  "inference": "$INFERENCE",
   "detected_at": "$DETECTED_AT"
 }
 EOF
 fi
 
-echo "Wrote $OUT_FILE (profile=$PROFILE, backend=$MINERU_BACKEND)"
+echo "Wrote $OUT_FILE (profile=$PROFILE, inference=$INFERENCE)"

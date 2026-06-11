@@ -10,7 +10,7 @@ PDF security scan + markdown conversion for agents and note pipelines.
 
 You are reading this README. **Ask your coding agent to install pdf2md** — paste:
 
-> Install pdf2md from this repository. Deploy the agent skills to `~/.agents/skills/`, run the install scripts, and adapt for my platform (macOS Apple Silicon, Linux CPU, or Linux CUDA). Follow the **For agents** section in README.md exactly.
+> Install pdf2md from this repository. Deploy the agent skills to `~/.agents/skills/`, run the install scripts, and adapt for my platform (macOS Apple Silicon or Linux + NVIDIA CUDA). Follow the **For agents** section in README.md exactly.
 
 The agent handles clone, skill copy, MinerU weights, and `pdf2md doctor`.
 
@@ -54,11 +54,12 @@ Each skill is self-contained: `SKILL.md`, `references/`, and `scripts/` (install
 
 | Profile | When | Inference |
 |---|---|---|
-| `mac_arm` | macOS Apple Silicon | MLX (`vlm-auto-engine`) |
-| `linux_gpu` | Linux + NVIDIA + CUDA | HuggingFace transformers + CUDA |
-| `linux_cpu` | Linux, no CUDA | HuggingFace transformers (CPU) |
+| `mac_arm` | macOS Apple Silicon | **MLX** |
+| `linux_gpu` | Linux + NVIDIA + CUDA | **HuggingFace transformers** (CUDA) |
 
-Force CPU on Linux: `.../install.sh --repo "$PDF2MD_REPO" --cpu`
+No vLLM, hybrid, or lmdeploy — only MLX (Mac) or HF transformers (Linux GPU).
+
+Linux without NVIDIA falls back to `linux_cpu` (transformers on CPU, slow). Force: `.../install.sh --repo "$PDF2MD_REPO" --cpu`
 
 **Scan-only** (no MinerU, no model download):
 
