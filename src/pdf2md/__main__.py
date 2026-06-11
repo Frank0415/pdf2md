@@ -50,6 +50,7 @@ def _cmd_convert(args: argparse.Namespace) -> int:
 
 
 def _cmd_doctor(_args: argparse.Namespace) -> int:
+    import os
     ok = True
     print(f"pdf2md {__version__}")
 
@@ -66,15 +67,16 @@ def _cmd_doctor(_args: argparse.Namespace) -> int:
         print(f"manifest: missing ({MANIFEST_PATH}) — run scripts/install.sh")
         ok = False
 
+    search_path = str(Path(sys.executable).parent) + os.pathsep + os.environ.get("PATH", "")
     for cmd in ("tesseract", "mineru"):
-        if shutil.which(cmd):
+        if shutil.which(cmd, path=search_path):
             print(f"  ok: {cmd}")
         else:
             print(f"  missing: {cmd}")
             if cmd in ("tesseract", "mineru"):
                 ok = False
 
-    if shutil.which("nvidia-smi"):
+    if shutil.which("nvidia-smi", path=search_path):
         try:
             out = subprocess.check_output(["nvidia-smi", "-L"], text=True)
             print(out.strip())
