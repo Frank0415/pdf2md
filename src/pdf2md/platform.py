@@ -9,7 +9,30 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+def _find_repo_root() -> Path:
+    """Locate project root (pyproject.toml) for editable and src installs."""
+    starts = [Path.cwd(), Path(__file__).resolve().parent]
+    seen: set[Path] = set()
+    for start in starts:
+        path = start.resolve()
+        for _ in range(8):
+            if path in seen:
+                break
+            seen.add(path)
+            if (path / "pyproject.toml").is_file() and (path / "src" / "pdf2md").is_dir():
+                return path
+            if (path / ".pdf2md" / "platform.json").is_file():
+                return path
+            if path.parent == path:
+                break
+            path = path.parent
+    fallback = Path(__file__).resolve().parents[2]
+    if (fallback / "pyproject.toml").is_file():
+        return fallback
+    return Path.cwd()
+
+
+REPO_ROOT = _find_repo_root()
 MANIFEST_PATH = REPO_ROOT / ".pdf2md" / "platform.json"
 
 VALID_PROFILES = frozenset({"mac_arm", "linux_cpu", "linux_gpu"})
