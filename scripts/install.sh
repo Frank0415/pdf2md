@@ -59,7 +59,7 @@ case "$PROFILE" in
     ;;
 esac
 
-uv pip install -U opendataloader-pdf ocrmypdf
+uv pip install -U opendataloader-pdf ocrmypdf "markitdown[pdf]"
 uv pip install -e .
 
 if command -v mineru-models-download >/dev/null 2>&1; then
